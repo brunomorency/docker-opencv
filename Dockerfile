@@ -5,11 +5,11 @@ MAINTAINER Bruno Morency <bruno@morency.me>
 RUN apt-get update
 
 # Install OpenCV dependencies
-RUN	apt-get install -y -q wget curl unzip
+RUN	apt-get install -y -q wget curl unzip execstack
 RUN	apt-get install -y -q build-essential
-RUN	apt-get install -y -q cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev libavfilter-dev
+RUN	apt-get install -y -q cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev libavfilter-dev opencl-dev
 RUN	apt-get install -y -q python2.7 python2.7-dev  python-numpy
-RUN	apt-get install -y -q libjpeg-dev libpng-dev libtiff-dev libjasper-dev zlib1g-dev libopenexr-dev libxine-dev libeigen3-dev libtbb2 libtbb-dev libdc1394-22-dev
+RUN	apt-get install -y -q libjpeg-dev libpng-dev libtiff-dev libjasper-dev zlib1g-dev libtbb2 libtbb-dev
 
 # Fake a fuse install (or openjdk-7-jdk will not install)
 RUN apt-get install libfuse2
@@ -31,6 +31,7 @@ ENV PATH $JAVA_HOME/bin:$PATH
 ADD	build_opencv.sh	/build_opencv.sh
 RUN	/bin/sh /build_opencv.sh
 RUN	rm -rf /build_opencv.sh
+RUN execstack -c /usr/local/opencv-3.0.0-beta/share/OpenCV/java/libopencv_java300.so
 ENV OPENCV_JAVA_PATH /usr/local/opencv-3.0.0-beta/share/OpenCV/java
 ENV OPENCV_JAR ${OPENCV_JAVA_PATH}/opencv-300.jar
 ENV LD_LIBRARY_PATH ${OPENCV_JAVA_PATH}
